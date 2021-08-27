@@ -377,13 +377,23 @@ bpfhv_upgrade_event(EventNotifier *notifier)
     event_notifier_test_and_clear(notifier);
 }
 
+static unsigned int
+prog_is_optional(unsigned int prog_idx)
+{
+	return prog_idx == BPFHV_PROG_RX_POSTPROC ||
+	       prog_idx == BPFHV_PROG_TX_PREPROC ||
+		   (prog_idx >= BPFHV_PROG_EXTRA_0 && prog_idx < BPFHV_PROG_MAX);
+}
+
 static int
 bpfhv_progs_load_fd(BpfhvState *s, int fd, const char *progsname,
                     const char *path, Error **errp)
 {
-    const char *prog_names[BPFHV_PROG_MAX] = {"none", "rxp", "rxc", "rxi",
-                                              "rxr", "rxh", "txp", "txc",
-                                              "txi", "txr", "txh"};
+    const char *prog_names[BPFHV_PROG_MAX] = {
+        "none", "rxp", "rxc", "rxi", "rxr", "rxh", "txp", "txc",
+        "txi", "txr", "txh", "extra0", "extra1", "extra2", "extra3",
+        "extra4", "extra5", "extra6", "extra7", "pdt"
+    };
     GElf_Ehdr ehdr;
     int ret = -1;
     Elf *elf;
@@ -467,8 +477,7 @@ bpfhv_progs_load_fd(BpfhvState *s, int fd, const char *progsname,
     }
 
     for (i = BPFHV_PROG_NONE + 1; i < BPFHV_PROG_MAX; i++) {
-        if ((s->progs[i].insns == NULL || s->progs[i].num_insns == 0) &&
-            (i != BPFHV_PROG_RX_POSTPROC && i != BPFHV_PROG_TX_PREPROC)) {
+        if ((s->progs[i].insns == NULL || s->progs[i].num_insns == 0) && !prog_is_optional(i)) {
             error_setg(errp, "Program %s missing in ELF '%s'",
                        prog_names[i], path);
             goto err;
@@ -1158,6 +1167,14 @@ bpfhv_io_write(void *opaque, hwaddr addr, uint64_t val, unsigned size)
         s->ioregs[index] = val;
         assert(s->curdump != NULL);
         s->ioregs[BPFHV_REG(DUMP_INPUT)] = *((uint32_t *)(s->curdump + val));
+        break;
+
+    case BPFHV_REG_HYPERVISOR_SIGNAL_0:
+        printf(
+            "Signal for the hypervisor -> write to BPFHV_REG_HYPERVISOR_SIGNAL_%x of %x",
+            (addr - BPFHV_REG_HYPERVISOR_SIGNAL_0) >> 2,
+            val
+        );
         break;
 
     default:

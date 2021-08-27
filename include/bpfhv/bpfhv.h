@@ -265,7 +265,16 @@ enum {
 	BPFHV_PROG_TX_INTRS,
 	BPFHV_PROG_TX_RECLAIM,
 	BPFHV_PROG_TX_PREPROC,
-	BPFHV_PROG_MAX,
+	BPFHV_PROG_EXTRA_0,
+	BPFHV_PROG_EXTRA_1,
+	BPFHV_PROG_EXTRA_2,
+	BPFHV_PROG_EXTRA_3,
+	BPFHV_PROG_EXTRA_4,
+	BPFHV_PROG_EXTRA_5,
+	BPFHV_PROG_EXTRA_6,
+	BPFHV_PROG_EXTRA_7,
+	BPFHV_PROG_PROG_DATA,
+	BPFHV_PROG_MAX
 };
 #define BPFHV_REG_PROG_SIZE		60
 #define BPFHV_PROG_SIZE_MAX		16384
@@ -319,9 +328,13 @@ enum {
 #define		BPFHV_REG_DUMP_INPUT	84
 #define		BPFHV_REG_DUMP_OFS	88
 
+/* Hypervisor signal */
+#define BPFHV_REG_HYPERVISOR_SIGNAL_0 92
+
 /* Marker for the end of valid registers, and size of the I/O region. */
-#define BPFHV_REG_END			92
+#define BPFHV_REG_END			96
 #define BPFHV_REG_MASK			0xff
+
 
 #ifdef __cplusplus
 }
