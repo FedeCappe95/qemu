@@ -98,6 +98,7 @@ static const char *regnames[] = {
     "DUMP_LEN",
     "DUMP_INPUT",
     "DUMP_OFS",
+    "HYPERVISOR_SIGNAL_0",
 };
 
 #define BPFHV_CSUM_FEATURES (BPFHV_F_TX_CSUM | BPFHV_F_RX_CSUM)
