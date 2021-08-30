@@ -1172,7 +1172,7 @@ bpfhv_io_write(void *opaque, hwaddr addr, uint64_t val, unsigned size)
 
     case BPFHV_REG_HYPERVISOR_SIGNAL_0:
         printf(
-            "Signal for the hypervisor -> write to BPFHV_REG_HYPERVISOR_SIGNAL_%x of %x",
+            "Signal for the hypervisor -> write to BPFHV_REG_HYPERVISOR_SIGNAL_%lx of %lx\n",
             (addr - BPFHV_REG_HYPERVISOR_SIGNAL_0) >> 2,
             val
         );
