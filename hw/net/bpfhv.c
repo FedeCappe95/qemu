@@ -383,7 +383,7 @@ prog_is_optional(unsigned int prog_idx)
 {
 	return prog_idx == BPFHV_PROG_RX_POSTPROC ||
 	       prog_idx == BPFHV_PROG_TX_PREPROC ||
-		   (prog_idx >= BPFHV_PROG_EXTRA_0 && prog_idx < BPFHV_PROG_MAX);
+		   (prog_idx >= BPFHV_PROG_SOCKET_RELEASED && prog_idx < BPFHV_PROG_MAX);
 }
 
 static int
@@ -392,7 +392,7 @@ bpfhv_progs_load_fd(BpfhvState *s, int fd, const char *progsname,
 {
     const char *prog_names[BPFHV_PROG_MAX] = {
         "none", "rxp", "rxc", "rxi", "rxr", "rxh", "txp", "txc",
-        "txi", "txr", "txh", "extra0", "extra1", "extra2", "extra3",
+        "txi", "txr", "txh", "srl", "srd", "extra0", "extra1", "extra2", "extra3",
         "extra4", "extra5", "extra6", "extra7", "pdt"
     };
     GElf_Ehdr ehdr;
